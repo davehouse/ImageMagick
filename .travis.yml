@@ -45,7 +45,5 @@ deploy:
     secure: em0npNCc+tp/KLC5XCyYlnwQEWQk/aoHRb/WvmUnmuBMqIUPzzWDzK9VfZb3JicIE2kJ20mYG+taacaDV4fZQS/9E5aXrqNQ9w2NflWNuMQauQ4zYi22zRgt+cveniAMFF+IRgc65ZeEoi0g9Lh8kxewnZP7a3OkCoUq44tWA3pEFW9zoJKkZSQMPm6loOS5rBGKgvk9HpIqTd/bFf9vnbBcIYWYcirSLcVi4AXkweD4my9Tw6nQ9NMRxh5qO6xpg1Jtb4N83OfMU5DFC/KVouah82yNr9/lUY3RiCLwoBb590OlMC2PcdKMSpw//gPNbkTyqAdJkVh+K5PDngxP6nCecPs31xj7DhBOx44yDQf++vBFIefsfo8i/dMSZxJPo066jaBSZPpY54YtMIWBhdAFnutJYeuZtAr5NTnied6E22CEYUXVySipkXpvBaTVCp5C5ssJDZc9fgMtQar/ae9GnFbtgJWlf3yYT0sv7NoR54nfx4YRMcD8fASvcYvG0VybDqK+6lAsk+tK5tzsbNvj8or+lpDzxIDsJpCJ/zHvzFqC3QfcsGyshORMUPpEmXPSgnhkWvz0p2ao+yH7lQ8hSkz8yDEqNFHIn/Np3uAt4SHmCfXurxNnBBKYW1PdpQaDyj5yIjavFi/ZlcvqoD0yAFczxJIe4GQCumJRE2A=
   file: imagemagick.dmg
   on:
-    repo: davehouse/ImageMagick
     all_branches: true
   skip_cleanup: 'true'
-  draft: true
