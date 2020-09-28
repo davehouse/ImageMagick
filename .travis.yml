@@ -25,6 +25,12 @@ script: |
   pkgbuild --root ./tmp/ -i com.imagemagick --install-location / imagemagick.pkg
   hdiutil makehybrid -hfs -hfs-volume-name imagemagick -o ./imagemagick.dmg out-dmg
   ccache -s
+  hdiutil attach imagemagick.dmg
+  installer -package /Volumes/imagemagick/imagemagick.pkg -target /
+  which display || true
+  ls -la /usr/local/ || true
+  ls -la /usr/local/bin/magick || true
+  hdiutil detach /Volumes/imagemagick
 deploy:
   provider: releases
   api_key:
