@@ -11,6 +11,8 @@ install:
   jpeg libpng libtiff libtool little-cms2 openjpeg webp xz libxml2 || true
 - export PATH="/usr/local/opt/ccache/libexec:$PATH"
 - export CCACHE_COMPRESS=""
+- sysctl -n hw.ncpu
+- sysctl -n hw.physicalcpu
 #for newer xcode? - export LDFLAGS="-L/usr/local/opt/libxml2/lib"
 #for newer xcode? - export CPPFLAGS="-I/usr/local/opt/libxml2/include"
 script: |
