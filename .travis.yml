@@ -33,7 +33,6 @@ script: |
   hdiutil detach /Volumes/imagemagick
   magick logo: logo.gif
   identify logo.gif
-  display logo.gif
 deploy:
   provider: releases
   api_key:
