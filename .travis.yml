@@ -4,9 +4,8 @@ compiler:
 - clang
 cache: ccache
 install:
-- brew install ccache
+- HOMEBREW_NO_AUTO_UPDATE=1 brew install ccache
 - export PATH="/usr/local/opt/ccache/libexec:$PATH"
-- ls -la /usr/local/opt/ccache/libexec
 - export CCACHE_COMPRESS=""
 - HOMEBREW_NO_AUTO_UPDATE=1 brew install --ignore-already-installed freetype jpeg
   libpng libtiff libtool little-cms2 openjpeg webp xz libxml2 || true
