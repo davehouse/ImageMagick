@@ -15,6 +15,9 @@ install:
 - sysctl -n hw.physicalcpu
 #for newer xcode? - export LDFLAGS="-L/usr/local/opt/libxml2/lib"
 #for newer xcode? - export CPPFLAGS="-I/usr/local/opt/libxml2/include"
+env:
+  global:
+  - MAKEFLAGS="-j 2"
 script: |
   set -e
   set -x
