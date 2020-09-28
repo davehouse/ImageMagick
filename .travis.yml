@@ -1,46 +1,51 @@
-sudo: required # needed for trusty beta
-dist: trusty   # needed for HarfBuzz
-
+os: osx
 language: c
-
+branches:
+  only:
+    master
 compiler:
-  - clang
-  - gcc
-
-before_script:
-  - sudo add-apt-repository -y ppa:as-bahanta/raqm
-  - sudo add-apt-repository ppa:dns/gnu -y
-  - sudo apt-key update -q
-  - sudo apt-get update -q
-  - sudo apt-get install --only-upgrade autoconf
-  - sudo apt-get install -y libraqm-dev libfreetype6-dev libharfbuzz-dev libfribidi-dev
-
+- clang
+cache: 
+  ccache: true
+  directories:
+  - config.cache
+install:
+- HOMEBREW_NO_AUTO_UPDATE=1 brew install --ignore-already-installed ccache freetype
+  jpeg libpng libtiff libtool little-cms2 openjpeg webp xz libxml2 || true
+- export PATH="/usr/local/opt/ccache/libexec:$PATH"
+- export CCACHE_COMPRESS=""
+- sysctl -n hw.ncpu
+- sysctl -n hw.physicalcpu
+#for newer xcode? - export LDFLAGS="-L/usr/local/opt/libxml2/lib"
+#for newer xcode? - export CPPFLAGS="-I/usr/local/opt/libxml2/include"
+env:
+  global:
+  - MAKEFLAGS="-j $(sysctl -n hw.ncpu)"
 script: |
   set -e
   set -x
   export CFLAGS="-Wno-deprecated-declarations -Wdeclaration-after-statement -Wno-error=unused-variable"
-  if [ "$TRAVIS_COMPILER" == "gcc" ] ; then
-    ./configure --with-quantum-depth=16 --enable-hdri=no --without-perl --prefix=/usr
-  else
-    ./configure --disable-openmp --with-quantum-depth=16 --enable-hdri=no --without-perl --prefix=/usr
-  fi
+  ./configure --cache-file --enable-osx-universal-binary=no --disable-dependency-tracking --disable-silent-rules --enable-static --disable-shared --without-perl --disable-opencl --disable-openmp --with-freetype=yes --with-modules --with-webp=yes --with-openjp2 --without-gslib --without-fftw --without-pango --without-x --without-wmf --with-magick-plus-plus=no --with-rsvg=no --with-gvc=no --with-quantum-depth=16 --enable-delegate-build --prefix='/usr/local' --with-raw=yes
   make
-  make install DESTDIR=$(readlink -f appdir)
-  # Build the fuzzers
-  ./.travis/build_fuzzers.sh
-  # Generate AppImage
-  mkdir -p appdir/usr/share/applications/ ; cp imagemagick.desktop appdir/usr/share/applications/
-  mkdir -p appdir/usr/share/icons/hicolor/128x128/apps/ ; touch appdir/usr/share/icons/hicolor/128x128/apps/imagemagick.png # FIXME
-  wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
-  chmod a+x linuxdeployqt*.AppImage
-  unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
-  export VERSION=$(git rev-parse --short HEAD)-$CC
-  ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/imagemagick.desktop -bundle-non-qt-libs
-  ./linuxdeployqt*.AppImage --appimage-extract
-  rm ./appdir/AppRun ; cp AppRun appdir/ ; chmod a+x ./appdir/AppRun # Replace symlink with custom script
-  PATH=./squashfs-root/usr/bin:$PATH ./squashfs-root/usr/bin/appimagetool -g ./appdir/
-
-after_success:
-  - find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
-  - if [ "$TRAVIS_BRANCH" == "$TRAVIS_TAG" ] ; then wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh ; bash upload.sh ImageMagick*AppImage* ; fi
-  - if [ "$TRAVIS_BRANCH" != "$TRAVIS_TAG" ] ; then curl --upload-file ./ImageMagick*.AppImage https://transfer.sh/ImageMagick-git.$(git rev-parse --short HEAD)-x86_64.AppImage ; fi
+  mkdir out-build
+  mkdir out-dmg
+  make DEST_DIR=$PWD/out-build install
+  pkgbuild --root ./out-build/ -i com.imagemagick --install-location / out-dmg/imagemagick.pkg
+  hdiutil makehybrid -hfs -hfs-volume-name imagemagick -o ./imagemagick.dmg out-dmg
+  hdiutil attach imagemagick.dmg
+  ls -la /Volumes/imagemagick/
+  sudo installer -package /Volumes/imagemagick/imagemagick.pkg -target /
+  ls -la /usr/local/bin/magick || true
+  hdiutil detach /Volumes/imagemagick
+  magick logo: logo.gif
+  identify logo.gif
+deploy:
+  provider: releases
+  api_key:
+    secure: em0npNCc+tp/KLC5XCyYlnwQEWQk/aoHRb/WvmUnmuBMqIUPzzWDzK9VfZb3JicIE2kJ20mYG+taacaDV4fZQS/9E5aXrqNQ9w2NflWNuMQauQ4zYi22zRgt+cveniAMFF+IRgc65ZeEoi0g9Lh8kxewnZP7a3OkCoUq44tWA3pEFW9zoJKkZSQMPm6loOS5rBGKgvk9HpIqTd/bFf9vnbBcIYWYcirSLcVi4AXkweD4my9Tw6nQ9NMRxh5qO6xpg1Jtb4N83OfMU5DFC/KVouah82yNr9/lUY3RiCLwoBb590OlMC2PcdKMSpw//gPNbkTyqAdJkVh+K5PDngxP6nCecPs31xj7DhBOx44yDQf++vBFIefsfo8i/dMSZxJPo066jaBSZPpY54YtMIWBhdAFnutJYeuZtAr5NTnied6E22CEYUXVySipkXpvBaTVCp5C5ssJDZc9fgMtQar/ae9GnFbtgJWlf3yYT0sv7NoR54nfx4YRMcD8fASvcYvG0VybDqK+6lAsk+tK5tzsbNvj8or+lpDzxIDsJpCJ/zHvzFqC3QfcsGyshORMUPpEmXPSgnhkWvz0p2ao+yH7lQ8hSkz8yDEqNFHIn/Np3uAt4SHmCfXurxNnBBKYW1PdpQaDyj5yIjavFi/ZlcvqoD0yAFczxJIe4GQCumJRE2A=
+  file: imagemagick.dmg
+  on:
+    repo: davehouse/ImageMagick
+    all_branches: true
+  skip_cleanup: 'true'
+  draft: true
