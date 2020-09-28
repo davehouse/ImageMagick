@@ -31,6 +31,9 @@ script: |
   ls -la /usr/local/ || true
   ls -la /usr/local/bin/magick || true
   hdiutil detach /Volumes/imagemagick
+  magick logo: logo.gif
+  identify logo.gif
+  display logo.gif
 deploy:
   provider: releases
   api_key:
