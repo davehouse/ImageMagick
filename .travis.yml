@@ -17,7 +17,7 @@ install:
 #for newer xcode? - export CPPFLAGS="-I/usr/local/opt/libxml2/include"
 env:
   global:
-  - MAKEFLAGS="-j 4"
+  - MAKEFLAGS="-j $(sysctl -n hw.ncpu)"
 script: |
   set -e
   set -x
