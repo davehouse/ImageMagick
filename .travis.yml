@@ -27,8 +27,6 @@ script: |
   hdiutil attach imagemagick.dmg
   ls -la /Volumes/imagemagick/
   sudo installer -package /Volumes/imagemagick/imagemagick.pkg -target /
-  which display || true
-  ls -la /usr/local/ || true
   ls -la /usr/local/bin/magick || true
   hdiutil detach /Volumes/imagemagick
   magick logo: logo.gif
