@@ -44,3 +44,4 @@ deploy:
   on:
     repo: davehouse/ImageMagick
   skip_cleanup: 'true'
+  edge: true
