@@ -22,7 +22,9 @@ script: |
   set -e
   set -x
   export CFLAGS="-Wno-deprecated-declarations -Wdeclaration-after-statement -Wno-error=unused-variable"
+  ls -la ./config.cache/
   ./configure --cache-file=./config.cache --enable-osx-universal-binary=no --disable-dependency-tracking --disable-silent-rules --enable-static --disable-shared --without-perl --disable-opencl --disable-openmp --with-freetype=yes --with-modules --with-webp=yes --with-openjp2 --without-gslib --without-fftw --without-pango --without-x --without-wmf --with-magick-plus-plus=no --with-rsvg=no --with-gvc=no --with-quantum-depth=16 --enable-delegate-build --prefix='/usr/local' --with-raw=yes
+  ls -la ./config.cache/
   make
   mkdir out-build
   mkdir out-dmg
