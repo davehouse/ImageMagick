@@ -9,7 +9,7 @@ cache:
   directories:
   - config.cache
 install:
-- HOMEBREW_NO_AUTO_UPDATE=1 brew install --ignore-already-installed ccache freetype
+- HOMEBREW_NO_INSTALL_CLEANUP=1 HOMEBREW_NO_AUTO_UPDATE=1 brew install ccache freetype
   jpeg libpng libtiff libtool little-cms2 openjpeg webp xz libxml2 || true
 - export PATH="/usr/local/opt/ccache/libexec:$PATH"
 - export CCACHE_COMPRESS=""
@@ -46,3 +46,4 @@ deploy:
     tags: true
   skip_cleanup: true
   edge: true
+  draft: true
