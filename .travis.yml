@@ -43,5 +43,6 @@ deploy:
   file: imagemagick.dmg
   on:
     repo: davehouse/ImageMagick
-    branch: travis_osx_release
-  skip_cleanup: 'true'
+    tags: true
+  skip_cleanup: true
+  edge: true
