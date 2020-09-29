@@ -43,5 +43,7 @@ deploy:
   file: imagemagick.dmg
   on:
     repo: davehouse/ImageMagick
+    tags: true
   skip_cleanup: true
   edge: true
+  draft: true
