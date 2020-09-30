@@ -40,8 +40,7 @@ script: |
   identify logo.gif
 deploy:
   provider: releases
-  api_key:
-    secure: "aw/18h8HTHVyerfQRtaVXSfNhgARUpK4Nm5uaJK6l4oT1oEAcaO57pifovXMfYcnhNPuxMyrqnx7jOqvBoL48ovzfaOhdxFGFriTmTK/XCH7GfA3qkUo4NlZriScOHzJ31v5hsmLukkO/nWfTMjKFLtb+fMejjFhPF7zQCx7pUb/nuAf6i5+haZw9N/THIIoZpLQDgr+ZKT3UFM1N318Ndq3I/r6+KEz9tpMuMdz+4e0MZz2chgkgWebGzZM7mJFUCtPzy8Dr4kCFyUkhKr5v2bMQclVnOh48ZgzyKUXsSf4zg6b4+QnNkaYbBfpYKBXazRLEkhO1Tax1mgD6lW8dN+jHrnJD6es/VCmU7RcYK1whtcy24lqolOjiCGeqec+1p4Y1Fu//pIPDtLT01QzqbERa3WOOOnUakQjhbrJZpINmttw7F9PMeIeohXV7EqEaicUtHiDadhvSHynRcgW/mufnfclnBO4kiifA1jGUpjQrgLVtuaEM+PMqm7zAwTDfxlDp1pJUq3A5FSFmniBmnKn7EiMEehMqzev6BtQnyuFsUnJVg2pz/r0V0XQ8DoCGH2vWxxvzARme2R/GkZQbBjDefIEyAzg2O5RHZY5XJWeYMu4YQPwgyTFnDDTT/6fo5Cz9uzA5cPHytKRlOVM/16ziRIMdEHFZofv2OVOIi0="
+  api_key: $PUBTOKEN
   file: imagemagick.dmg
   on:
     repo: davehouse/ImageMagick
